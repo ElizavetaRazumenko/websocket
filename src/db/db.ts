@@ -1,5 +1,7 @@
-import { Player, RoomPlayers } from './types';
+import { IdentificationalWebSocket, Player, RoomWithOnePlayer } from './types';
+
+export const usersConnections: IdentificationalWebSocket[] = [];
 
 export const players: Player[] = [];
 
-export const roomPlayers: RoomPlayers[] = [];
+export const roomsWithOnePlayer: RoomWithOnePlayer[] = [];

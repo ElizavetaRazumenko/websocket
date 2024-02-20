@@ -1,6 +1,6 @@
-import WebSocket from 'ws';
-import { roomPlayers } from '../db/db';
+import { roomsWithOnePlayer } from '../db/db';
+import { IdentificationalWebSocket } from '../db/types';
 
-export const createRoom = (ws: WebSocket) => {
-  console.log(roomPlayers.length);
+export const createRoom = (ws: IdentificationalWebSocket) => {
+  roomsWithOnePlayer.push()
 };
