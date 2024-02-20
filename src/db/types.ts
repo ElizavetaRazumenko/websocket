@@ -1,11 +1,10 @@
 import { WebSocket } from 'ws';
 
-export interface IdentificationalWebSocket extends WebSocket {
+export interface WebSocketWithId extends WebSocket {
   id: string;
 }
 
 export type Player = {
-  id: string,
   name: string;
   password: string;
   wins: number;
@@ -64,7 +63,7 @@ export type RandomAttack = {
   indexPlayer: number;
 };
 
-export type RoomWithOnePlayer = {
+export type PlayerRooms = {
   roomId: string;
-  playerId: string;
+  playerNames: string[];
 }

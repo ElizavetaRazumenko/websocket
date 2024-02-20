@@ -1,17 +1,35 @@
-import { players, roomsWithOnePlayer } from '../db/db';
-import { IdentificationalWebSocket, Player } from '../db/types';
+import WebSocket from 'ws';
+import { players, playerRooms } from '../db/db';
 
-export const updateRoom = (ws: IdentificationalWebSocket) => {
-    const data = roomsWithOnePlayer.map((room) => {
-        const roomUser = players.find((player) => player.id === room.playerId) as Player;
-        return { roomId: room.roomId, roomUsers: [{ name: roomUser.name, index: players.indexOf(roomUser) }]}
+export const updateRoom = (ws: WebSocket) => {
+  const roomsWithOnePlayer = playerRooms.filter(
+    (room) => room.playerNames.length === 1
+  );
+
+  let data;
+  if (roomsWithOnePlayer.length) {
+    data = roomsWithOnePlayer.map((room) => {
+      const roomUsers = room.playerNames.map((name) => ({
+        name,
+        index: players.indexOf(players.find((player) => player.name === name)!),
+      }));
+      return {
+        roomId: room.roomId,
+        roomUsers,
+      };
     });
-
-    const responseData = {
-        type: "update_room",
-        data,
-        id: 0,
+  } else {
+    data = {
+      roomId: -1,
+      roomUser: [],
     };
+  }
 
-    ws.send(JSON.stringify(responseData));
+  const responseData = {
+    type: 'update_room',
+    data: JSON.stringify(data),
+    id: 0,
+  };
+
+  ws.send(JSON.stringify(responseData));
 };

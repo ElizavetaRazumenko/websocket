@@ -1,10 +1,13 @@
-import { FrontRequest, IdentificationalWebSocket, PlayerReg } from '../db/types';
+import WebSocket from 'ws';
+import { FrontRequest, PlayerReg } from '../db/types';
 import { regPlayer } from '../responses/personal';
+import { updateRoom } from '../responses/updateRoom';
 
-export const handleWsRequest = (ws: IdentificationalWebSocket, request: FrontRequest) => {
+export const handleWsRequest = (ws: WebSocket, request: FrontRequest) => {
   switch (request.type) {
     case 'reg':
       regPlayer(ws, request.data as PlayerReg);
+      updateRoom(ws);
       break;
   }
 };
