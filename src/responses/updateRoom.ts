@@ -7,6 +7,7 @@ export const updateRoom = (ws: WebSocket) => {
   );
 
   let data;
+
   if (roomsWithOnePlayer.length) {
     data = roomsWithOnePlayer.map((room) => {
       const roomUsers = room.playerNames.map((name) => ({

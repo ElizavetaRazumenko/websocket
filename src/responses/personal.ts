@@ -1,16 +1,15 @@
-import WebSocket from 'ws';
 import { players } from '../db/db';
 import { isPlayerExist } from '../utils/isPlayerExist';
-import { Player } from '../db/types';
+import { Player, WebSocketWithId } from '../db/types';
 
 type UserData = {
   name: string;
   password: string;
 };
 
-export const regPlayer = (ws: WebSocket, { name, password }: UserData) => {
+export const regPlayer = (ws: WebSocketWithId, { name, password }: UserData) => {
   if (!isPlayerExist(name)) {
-    players.push({ name, password, wins: 0 });
+    players.push({ wsId: ws.id, name, password, wins: 0 });
   }
 
   const player = players.find((player) => player.name === name) as Player;
