@@ -23,14 +23,14 @@ export const regPlayer = (
   if (player.password !== password) {
     data = {
       name,
-      index: players.indexOf(player),
+      index: player.wsId,
       error: true,
       errorText: 'Invalid password',
     };
   } else {
     data = {
       name,
-      index: players.indexOf(player),
+      index: player.wsId,
       error: false,
       errorText: '',
     };

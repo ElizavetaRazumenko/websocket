@@ -30,7 +30,7 @@ export type Game = {
 export type UserGameInfo = {
   wsId: number;
   turn: boolean;
-  field?: GameCells;
+  field?: GameCells | [];
 }
 
 export type GameField = GameCells[][];
@@ -39,10 +39,10 @@ export type GameCells =
   | 'miss'
   | 'killed'
   | 'shot'
-  | 'xs'
-  | 'xm'
-  | 'xl'
-  | 'xxl'
+  | 'small'
+  | 'medium'
+  | 'large'
+  | 'huge6'
   | 'empty';
 
 

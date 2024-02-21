@@ -1,9 +1,11 @@
 import {
+  AddShips,
   AddUserToRoom,
   FrontRequest,
   PlayerReg,
   WebSocketWithId,
 } from '../db/types';
+import { addShips } from '../responses/addShips';
 import { addUserToRoom } from '../responses/addUserToRoom';
 import { createGame } from '../responses/createGame';
 import { createRoom } from '../responses/createRoom';
@@ -26,6 +28,9 @@ export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
       addUserToRoom(ws, JSON.parse(request.data as string) as AddUserToRoom);
       updateRoom();
       createGame(JSON.parse(request.data as string) as AddUserToRoom);
+      break;
+    case 'add_ships':
+      addShips(ws, JSON.parse(request.data as string) as AddShips);
       break;
   }
 };
