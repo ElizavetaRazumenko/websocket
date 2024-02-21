@@ -1,12 +1,13 @@
-import WebSocket from 'ws';
-import { winners } from '../db/db';
+import { winners, usersConnections } from '../db/db';
 
-export const updateWinners = (ws: WebSocket) => {
+export const updateWinners = () => {
   const responseData = {
     type: 'update_winners',
     data: JSON.stringify(winners),
     id: 0,
   };
 
-  ws.send(JSON.stringify(responseData));
+  usersConnections.forEach((connection) => {
+    connection.send(JSON.stringify(responseData));
+  });
 };

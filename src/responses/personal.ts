@@ -7,12 +7,16 @@ type UserData = {
   password: string;
 };
 
-export const regPlayer = (ws: WebSocketWithId, { name, password }: UserData) => {
+export const regPlayer = (
+  ws: WebSocketWithId,
+  { name, password }: UserData
+) => {
   if (!isPlayerExist(name)) {
     players.push({ wsId: ws.id, name, password, wins: 0 });
   }
 
   const player = players.find((player) => player.name === name) as Player;
+  player.wsId = ws.id;
 
   let data;
 
@@ -39,4 +43,7 @@ export const regPlayer = (ws: WebSocketWithId, { name, password }: UserData) => 
   };
 
   ws.send(JSON.stringify(responseData));
+
+  console.log('register player:');
+  console.log(players);
 };

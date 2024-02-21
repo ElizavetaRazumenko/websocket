@@ -4,14 +4,22 @@ export interface WebSocketWithId extends WebSocket {
   id: string;
 }
 
-export type CurrentPlayer = Omit<Player, 'wins'>;
-
 export type Player = {
   wsId: string;
   name: string;
   password: string;
   wins: number;
 };
+
+export type PlayerRooms = {
+  roomId: number;
+  playerNames: string[];
+}
+
+export type Winner = {
+  name: string;
+  wins: number;
+}
 
 export type FrontRequest = {
   type: string;
@@ -65,13 +73,3 @@ export type RandomAttack = {
   gameId: number;
   indexPlayer: number;
 };
-
-export type PlayerRooms = {
-  roomId: string;
-  playerNames: string[];
-}
-
-export type Winner = {
-  name: string;
-  wins: number;
-}

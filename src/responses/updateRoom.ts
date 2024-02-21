@@ -1,36 +1,48 @@
-import WebSocket from 'ws';
-import { players, playerRooms } from '../db/db';
+import { players, playerRooms, usersConnections } from '../db/db';
+import { Player, WebSocketWithId } from '../db/types';
 
-export const updateRoom = (ws: WebSocket) => {
+export const updateRoom = (ws: WebSocketWithId) => {
   const roomsWithOnePlayer = playerRooms.filter(
     (room) => room.playerNames.length === 1
   );
 
   let data;
-
-  if (roomsWithOnePlayer.length) {
-    data = roomsWithOnePlayer.map((room) => {
-      const roomUsers = room.playerNames.map((name) => ({
-        name,
-        index: players.indexOf(players.find((player) => player.name === name)!),
-      }));
-      return {
-        roomId: room.roomId,
-        roomUsers,
+  usersConnections.forEach((connection) => {
+    if (roomsWithOnePlayer.length) {
+      const currentPlayer = players.find((player) => player.wsId === ws.id) as Player;
+      const availableRooms = roomsWithOnePlayer.filter((room) => !room.playerNames.includes(currentPlayer.name));
+      if (availableRooms.length) {
+        data = availableRooms.map((room) => {
+          const roomUsers = room.playerNames.map((name) => ({
+            name,
+            index: players.indexOf(
+              players.find((player) => player.name === name)!
+            ),
+          }));
+          return {
+            roomId: room.roomId,
+            roomUsers,
+          };
+        });
+      } else {
+        data = {
+          roomId: -1,
+          roomUser: [],
+        };
+      }
+    } else {
+      data = {
+        roomId: -1,
+        roomUser: [],
       };
-    });
-  } else {
-    data = {
-      roomId: -1,
-      roomUser: [],
+    }
+
+    const responseData = {
+      type: 'update_room',
+      data: JSON.stringify(data),
+      id: 0,
     };
-  }
 
-  const responseData = {
-    type: 'update_room',
-    data: JSON.stringify(data),
-    id: 0,
-  };
-
-  ws.send(JSON.stringify(responseData));
+    connection.send(JSON.stringify(responseData));
+  });
 };
