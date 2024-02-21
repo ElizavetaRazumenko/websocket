@@ -25,7 +25,7 @@ export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
     case 'add_user_to_room':
       addUserToRoom(ws, JSON.parse(request.data as string) as AddUserToRoom);
       updateRoom();
-      createGame(ws, JSON.parse(request.data as string) as AddUserToRoom);
+      createGame(JSON.parse(request.data as string) as AddUserToRoom);
       break;
   }
 };

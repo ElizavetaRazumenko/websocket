@@ -21,19 +21,16 @@ export type Winner = {
   wins: number;
 }
 
-export type currentGames = Game[];
-
-/*
-
-export type currentGames = Record<string(game id), { player_1: Game, player_2: Game }>
-
-*/
-
 export type Game = {
-  id: string;
-  field: GameCells;
-  playerId: string;
+  id: number;
+  player_1: UserGameInfo;
+  player_2: UserGameInfo;
+}
+
+export type UserGameInfo = {
+  wsId: number;
   turn: boolean;
+  field?: GameCells;
 }
 
 export type GameField = GameCells[][];
@@ -42,10 +39,10 @@ export type GameCells =
   | 'miss'
   | 'killed'
   | 'shot'
-  | 'small'
-  | 'medium'
-  | 'large'
-  | 'huge'
+  | 'xs'
+  | 'xm'
+  | 'xl'
+  | 'xxl'
   | 'empty';
 
 
