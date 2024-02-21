@@ -30,7 +30,7 @@ export const updateRoom = () => {
     data: JSON.stringify(data),
     id: 0,
   };
-
+  
   usersConnections.forEach((connection) => {
     connection.send(JSON.stringify(responseData));
   });

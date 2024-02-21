@@ -1,8 +1,8 @@
-import crypto from 'crypto';
 import { WebSocketServer } from 'ws';
 import { handleWsRequest } from './handleWsRequest';
 import { removeUserConnection, usersConnections } from '../db/db';
 import { WebSocketWithId } from '../db/types';
+import { getNumberId } from '../utils/getNumberId';
 
 const wsPort = 3000;
 
@@ -13,7 +13,7 @@ export const wsServer = new WebSocketServer({
 wsServer.on('connection', (ws: WebSocketWithId) => {
   console.log(`WebSocket connection established on the ${wsPort} port`);
 
-  const id = crypto.randomBytes(16).toString('hex');
+  const id = getNumberId();
   ws.id = id;
 
   usersConnections.push(ws);

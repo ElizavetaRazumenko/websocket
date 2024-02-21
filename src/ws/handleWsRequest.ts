@@ -5,6 +5,7 @@ import {
   WebSocketWithId,
 } from '../db/types';
 import { addUserToRoom } from '../responses/addUserToRoom';
+import { createGame } from '../responses/createGame';
 import { createRoom } from '../responses/createRoom';
 import { regPlayer } from '../responses/personal';
 import { updateRoom } from '../responses/updateRoom';
@@ -24,6 +25,7 @@ export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
     case 'add_user_to_room':
       addUserToRoom(ws, JSON.parse(request.data as string) as AddUserToRoom);
       updateRoom();
+      createGame(ws, JSON.parse(request.data as string) as AddUserToRoom);
       break;
   }
 };

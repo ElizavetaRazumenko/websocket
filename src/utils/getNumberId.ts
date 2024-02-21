@@ -1,0 +1,1 @@
+export const getNumberId = (): number => Math.ceil(Math.random()*1000);

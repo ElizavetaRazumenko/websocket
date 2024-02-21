@@ -8,7 +8,7 @@ export const winners: Winner[] = [];
 
 export const playerRooms: PlayerRooms[] = [];
 
-export const removeUserConnection = (id: string) => {
+export const removeUserConnection = (id: number) => {
   usersConnections = usersConnections.filter(
     (connection) => connection.id !== id,
   );
