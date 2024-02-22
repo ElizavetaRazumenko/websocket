@@ -37,7 +37,7 @@ export const createGame = ({ indexRoom }: AddUserToRoom) => {
     id: idGame,
     player_1: {
       wsId: playingWsIds[0],
-      turn: true,
+      turn: false,
     },
     player_2: {
       wsId: playingWsIds[1],

@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import { AddShips, Attack, GameField, RandomAttack } from './gameProgress';
+import { AddShips, Attack, GameField, RandomAttack, Ship } from './game';
 
 export interface WebSocketWithId extends WebSocket {
   id: number;
@@ -15,25 +15,25 @@ export type Player = {
 export type PlayerRooms = {
   roomId: number;
   playerNames: string[];
-}
+};
 
 export type Winner = {
   name: string;
   wins: number;
-}
+};
 
 export type Game = {
   id: number;
   player_1: UserGameInfo;
   player_2: UserGameInfo;
-}
+};
 
 export type UserGameInfo = {
   wsId: number;
   turn: boolean;
-  field?: GameField | [];
-}
-
+  field?: GameField;
+  shipsData? : Ship[];
+};
 
 export type FrontRequest = {
   type: string;
@@ -59,4 +59,3 @@ export type CreateRoom = string;
 export type AddUserToRoom = {
   indexRoom: number;
 };
-
