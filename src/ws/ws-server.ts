@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { handleWsRequest } from './handleWsRequest';
 import { removeUserConnection, usersConnections } from '../db/db';
-import { WebSocketWithId } from '../db/types';
+import { WebSocketWithId } from '../types/core';
 import { getNumberId } from '../utils/getNumberId';
 
 const wsPort = 3000;

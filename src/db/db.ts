@@ -1,4 +1,4 @@
-import { WebSocketWithId, Player, PlayerRooms, Winner, Game } from './types';
+import { WebSocketWithId, Player, PlayerRooms, Winner, Game } from '../types/core';
 
 export let usersConnections: WebSocketWithId[] = [];
 

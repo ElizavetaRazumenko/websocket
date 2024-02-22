@@ -1,5 +1,5 @@
 import { players, playerRooms, usersConnections } from '../db/db';
-import { Player } from '../db/types';
+import { Player } from '../types/core';
 
 export const updateRoom = () => {
   const roomsWithOnePlayer = playerRooms.filter(

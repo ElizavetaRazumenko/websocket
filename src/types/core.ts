@@ -1,4 +1,5 @@
 import { WebSocket } from 'ws';
+import { AddShips, Attack, GameField, RandomAttack } from './gameProgress';
 
 export interface WebSocketWithId extends WebSocket {
   id: number;
@@ -30,20 +31,8 @@ export type Game = {
 export type UserGameInfo = {
   wsId: number;
   turn: boolean;
-  field?: GameCells | [];
+  field?: GameField | [];
 }
-
-export type GameField = GameCells[][];
-
-export type GameCells =
-  | 'miss'
-  | 'killed'
-  | 'shot'
-  | 'small'
-  | 'medium'
-  | 'large'
-  | 'huge6'
-  | 'empty';
 
 
 export type FrontRequest = {
@@ -71,30 +60,3 @@ export type AddUserToRoom = {
   indexRoom: number;
 };
 
-export type AddShips = {
-  gameId: number;
-  ships: [
-    {
-      position: {
-        x: number;
-        y: number;
-      };
-      direction: number;
-      length: number;
-      type: 'small' | 'medium' | 'large' | 'huge';
-    }
-  ];
-  indexPlayer: number;
-};
-
-export type Attack = {
-  gameId: number;
-  x: number;
-  y: number;
-  indexPlayer: number;
-};
-
-export type RandomAttack = {
-  gameId: number;
-  indexPlayer: number;
-};

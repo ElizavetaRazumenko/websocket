@@ -1,6 +1,6 @@
 import { players } from '../db/db';
 import { isPlayerExist } from '../utils/isPlayerExist';
-import { Player, WebSocketWithId } from '../db/types';
+import { Player, WebSocketWithId } from '../types/core';
 
 type UserData = {
   name: string;

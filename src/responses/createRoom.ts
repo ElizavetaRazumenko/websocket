@@ -1,5 +1,5 @@
 import { playerRooms, players } from '../db/db';
-import { WebSocketWithId } from '../db/types';
+import { WebSocketWithId } from '../types/core';
 import { getNumberId } from '../utils/getNumberId';
 
 export const createRoom = (ws: WebSocketWithId) => {

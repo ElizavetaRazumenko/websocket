@@ -1,10 +1,10 @@
 import {
-  AddShips,
   AddUserToRoom,
   FrontRequest,
   PlayerReg,
   WebSocketWithId,
-} from '../db/types';
+} from '../types/core';
+import { AddShips } from '../types/gameProgress';
 import { addShips } from '../responses/addShips';
 import { addUserToRoom } from '../responses/addUserToRoom';
 import { createGame } from '../responses/createGame';

@@ -1,5 +1,5 @@
 import { currentGames, playerRooms, players, usersConnections } from '../db/db';
-import { AddUserToRoom, Player } from '../db/types';
+import { AddUserToRoom, Player } from '../types/core';
 import { getNumberId } from '../utils/getNumberId';
 
 export const createGame = ({ indexRoom }: AddUserToRoom) => {
