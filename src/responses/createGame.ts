@@ -1,4 +1,4 @@
-import { currentGames, playerRooms, players, usersConnections } from '../db/db';
+import { currentGames, playerRooms, players, removePlayerRoom, usersConnections } from '../db/db';
 import { AddUserToRoom, Player } from '../types/core';
 import { getNumberId } from '../utils/getNumberId';
 
@@ -46,6 +46,7 @@ export const createGame = ({ indexRoom }: AddUserToRoom) => {
   };
 
   currentGames.push(game);
+  removePlayerRoom(room.roomId);
 
   console.log('currentGames is:');
   console.log(currentGames[0]);

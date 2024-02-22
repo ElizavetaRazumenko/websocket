@@ -1,8 +1,8 @@
-import { currentGames } from '../db/db';
-import { Game, UserGameInfo, WebSocketWithId } from '../types/core';
+import { UserGameInfo, WebSocketWithId } from '../types/core';
 import { AddShips, Ship } from '../types/game';
 import { createGameField } from '../utils/createGameField';
 import { findCurrentConnection } from '../utils/findCurrentConnection';
+import { findCurrentGame } from '../utils/findCurrentGame';
 import { sendTurn } from './sendTurn';
 
 const sendStartGameRequest = (
@@ -22,9 +22,7 @@ const sendStartGameRequest = (
 };
 
 export const startGame = (ws: WebSocketWithId, data: AddShips) => {
-  const currentGame = currentGames.find(
-    (game) => game.id === data.gameId
-  ) as Game;
+  const currentGame = findCurrentGame(data.gameId);
 
   const ships: Ship[] = data.ships;
   const field = createGameField(ships);
