@@ -1,5 +1,5 @@
 import { players, playerRooms, usersConnections } from '../db/db';
-import { Player } from '../types/core';
+import { findPlayerById, findPlayerByName } from '../utils/findPlayer';
 
 export const updateRoom = () => {
   const roomsWithOnePlayer = playerRooms.filter(
@@ -10,9 +10,8 @@ export const updateRoom = () => {
 
   usersConnections.forEach((connection) => {
     if (roomsWithOnePlayer.length) {
-      const currentPlayer = players.find(
-        (player) => player.wsId === connection.id
-      ) as Player;
+      const currentPlayer = findPlayerById(connection.id);
+
       const availableRooms = roomsWithOnePlayer.filter(
         (room) => !room.playerNames.includes(currentPlayer.name)
       );
@@ -21,9 +20,7 @@ export const updateRoom = () => {
         data = availableRooms.map((room) => {
           const roomUsers = room.playerNames.map((name) => ({
             name,
-            index: players.indexOf(
-              players.find((player) => player.name === name)!
-            ),
+            index: players.indexOf(findPlayerByName(name)), //  Пересмотреть, можно ли вместо индекса кидать айди
           }));
           return {
             roomId: room.roomId,

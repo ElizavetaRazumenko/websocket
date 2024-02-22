@@ -1,6 +1,7 @@
 import { players } from '../db/db';
 import { isPlayerExist } from '../utils/isPlayerExist';
-import { Player, WebSocketWithId } from '../types/core';
+import { WebSocketWithId } from '../types/core';
+import { findPlayerByName } from '../utils/findPlayer';
 
 type UserData = {
   name: string;
@@ -15,7 +16,7 @@ export const regPlayer = (
     players.push({ wsId: ws.id, name, password, wins: 0 });
   }
 
-  const player = players.find((player) => player.name === name) as Player;
+  const player = findPlayerByName(name);
   player.wsId = ws.id;
 
   let data;

@@ -1,5 +1,6 @@
 import { playerRooms, players } from '../db/db';
-import { AddUserToRoom, Player, WebSocketWithId } from '../types/core';
+import { AddUserToRoom, WebSocketWithId } from '../types/core';
+import { findPlayerById } from '../utils/findPlayer';
 
 export const addUserToRoom = (
   ws: WebSocketWithId,
@@ -19,7 +20,7 @@ export const addUserToRoom = (
     return;
   }
 
-  const newPlayer = players.find((player) => player.wsId === ws.id) as Player;
+  const newPlayer = findPlayerById(ws.id);
   room.playerNames.push(newPlayer.name);
 
   console.log('Add user to room:');

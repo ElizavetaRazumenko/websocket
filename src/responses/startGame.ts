@@ -27,36 +27,38 @@ export const startGame = (ws: WebSocketWithId, data: AddShips) => {
   const ships: Ship[] = data.ships;
   const field = createGameField(ships);
 
-  if (currentGame.player_1.wsId === ws.id) {
-    currentGame.player_1.field = field;
-    currentGame.player_1.shipsData = ships;
-  } else if (currentGame.player_2.wsId === ws.id) {
-    currentGame.player_2.field = field;
-    currentGame.player_2.shipsData = ships;
+  const { player_1, player_2 } = currentGame;
+
+  if (player_1.wsId === ws.id) {
+    player_1.field = field;
+    player_1.shipsData = ships;
+  } else {
+    player_2.field = field;
+    player_2.shipsData = ships;
   }
 
   // Going to the block below means that the current connection is the second one
   // Accordingly, the player with an ID different from this connection ID
   // will go first
-  if (currentGame.player_1.field && currentGame.player_2.field) {
-    if (currentGame.player_1.wsId !== ws.id) {
-      currentGame.player_1.turn = true;
-      const connection_1 = findCurrentConnection(currentGame.player_1.wsId);
-      sendStartGameRequest(connection_1, currentGame.player_1);
+  if (player_1.field && player_2.field) {
+    if (player_1.wsId !== ws.id) {
+      player_1.turn = true;
+      const connection_1 = findCurrentConnection(player_1.wsId);
+      sendStartGameRequest(connection_1, player_1);
 
       const connection_2 = ws;
-      sendStartGameRequest(connection_2, currentGame.player_2);
+      sendStartGameRequest(connection_2, player_2);
 
-      sendTurn(currentGame.player_1.wsId, connection_1, connection_2);
+      sendTurn(player_1.wsId, connection_1, connection_2);
     } else {
       const connection_1 = ws;
-      sendStartGameRequest(connection_1, currentGame.player_1);
+      sendStartGameRequest(connection_1, player_1);
 
-      currentGame.player_2.turn = true;
-      const connection_2 = findCurrentConnection(currentGame.player_2.wsId);
-      sendStartGameRequest(connection_2, currentGame.player_2);
+      player_2.turn = true;
+      const connection_2 = findCurrentConnection(player_2.wsId);
+      sendStartGameRequest(connection_2, player_2);
 
-      sendTurn(currentGame.player_2.wsId, connection_1, connection_2);
+      sendTurn(player_2.wsId, connection_1, connection_2);
     }
   }
 };
