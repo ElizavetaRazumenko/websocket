@@ -2,6 +2,7 @@ import { UserGameInfo } from '../types/core';
 import { Attack } from '../types/game';
 import { findCurrentConnection } from '../utils/findCurrentConnection';
 import { findCurrentGame } from '../utils/findCurrentGame';
+import { getCellStatus } from '../utils/getCellStatus';
 
 export const attack = (attackData: Attack) => {
   const currentGame = findCurrentGame(attackData.gameId);
@@ -21,7 +22,15 @@ export const attack = (attackData: Attack) => {
   if (sendAttackPlayer.turn) {
     const { x, y } = attackData;
     const shottingCell = getAttackPlayer.field![y][x];
-    console.log(shottingCell);
+
+    const cellStatus = getCellStatus(shottingCell, getAttackPlayer.field!, {
+      x,
+      y,
+    });
+
+    console.log('cellStatus');
+    console.log(cellStatus);
+
     const connection1 = findCurrentConnection(sendAttackPlayer.wsId);
     const connection2 = findCurrentConnection(getAttackPlayer.wsId);
 
@@ -33,7 +42,7 @@ export const attack = (attackData: Attack) => {
           y,
         },
         currentPlayer: sendAttackPlayer.wsId,
-        status: 'shot',
+        status: 5,
       }),
       id: 0,
     };

@@ -1,109 +1,75 @@
-import { HUGE_SHIP_LENGTH, LARGE_SHIP_LENGTH } from '../constants/variables';
+import {
+  CELL_LENGTH,
+  LARGE_SHIP_LENGTH,
+  MAX_CELLS_PER_STEP,
+} from '../constants/variables';
 import { CellCoords, GameCell, GameField } from '../types/game';
 
-type NeighborsCells = {
+type AdjacentCells = {
   status: GameCell;
   x: number;
   y: number;
-};
-
-const isCellsCorresponds = (
-  field: GameField,
-  { x, y }: CellCoords,
-  condition: string
-): boolean => {
-  return (
-    field[x - 1]?.[y] === condition ||
-    field[x + 1]?.[y] === condition ||
-    field[x][y - 1] === condition ||
-    field[x][y + 1] === condition
-  );
 };
 
 export const checkNeighboringCells = (
   cell: GameCell,
   field: GameField,
   { x, y }: CellCoords
-): string => {
+): GameCell => {
   // Medium cell checking
   if (cell === 'medium') {
-    if (isCellsCorresponds(field, { x, y }, 'medium')) {
+    if (selectAdjacentCells(field, { x, y }, 'medium').length) {
       return 'shot';
     }
     return 'killed';
-
     // Large cell checking
   } else if (cell === 'large') {
-    if (isCellsCorresponds(field, { x, y }, 'large')) {
+    if (selectAdjacentCells(field, { x, y }, 'large').length) {
       return 'shot';
     } else {
-      const shotCellNeighbors: NeighborsCells[] = getNeighboringCells(field, {
-        x,
-        y,
-      }).filter((cell) => cell.status === 'shot');
+      const shotCells: AdjacentCells[] = selectAdjacentCells(
+        field,
+        { x, y },
+        'shot'
+      );
 
-      if (shotCellNeighbors.length === LARGE_SHIP_LENGTH - 1) {
+      if (shotCells.length === LARGE_SHIP_LENGTH - CELL_LENGTH) {
         return 'killed';
-
-        // if not two cells are shots, then one
       } else {
-        const { x, y } = shotCellNeighbors[0];
+        const { x, y } = shotCells[0];
 
-        const shotNeighborCellForNeighborCell = getNeighboringCells(field, {
-          x,
-          y,
-        }).filter((cell) => cell.status === 'shot');
+        const shotCellsForCell = selectAdjacentCells(field, { x, y }, 'shot');
 
-        if (shotNeighborCellForNeighborCell.length) {
-          return 'killed';
-        } else {
-          return 'shot';
-        }
+        return shotCellsForCell.length ? 'killed' : 'shot';
       }
     }
-
     // Huge cell checking
   } else {
-    if (isCellsCorresponds(field, { x, y }, 'huge')) {
+    if (selectAdjacentCells(field, { x, y }, 'huge').length) {
       return 'shot';
     } else {
-      const shotCellNeighbors: NeighborsCells[] = getNeighboringCells(field, {
-        x,
-        y,
-      }).filter((cell) => cell.status === 'shot');
+      const shotCells: AdjacentCells[] = selectAdjacentCells(
+        field,
+        { x, y },
+        'shot'
+      );
 
-      if (shotCellNeighbors.length === HUGE_SHIP_LENGTH - 2) {
-        const shotNeighborCellForNeighborCell = shotCellNeighbors.filter(
+      if (shotCells.length === MAX_CELLS_PER_STEP) {
+        const shotCellsForCell = shotCells.filter(
           (cell) =>
-            getNeighboringCells(field, {
-              x: cell.x,
-              y: cell.y,
-            }).filter((cell) => cell.status === 'shot').length
+            selectAdjacentCells(field, { x: cell.x, y: cell.y }, 'shot').length
         );
-        if (shotNeighborCellForNeighborCell.length) {
-          return 'killed';
-        } else {
-          return 'shot';
-        }
+
+        return shotCellsForCell.length ? 'killed' : 'shot';
       } else {
-        const { x, y } = shotCellNeighbors[0];
-        const shotNeighborCellForNeighborCell = getNeighboringCells(field, {
-          x,
-          y,
-        }).filter((cell) => cell.status === 'shot');
+        const { x, y } = shotCells[0];
+        const shotCellsForCell = selectAdjacentCells(field, { x, y }, 'shot');
 
-        if (shotNeighborCellForNeighborCell.length) {
-          const { x, y } = shotNeighborCellForNeighborCell[0];
-          const shotNeighborsForCell = getNeighboringCells(field, {
-            x,
-            y,
-          }).filter((cell) => cell.status === 'shot');
+        if (shotCellsForCell.length) {
+          const { x, y } = shotCellsForCell[0];
+          const shotCells = selectAdjacentCells(field, { x, y }, 'shot');
 
-          if (shotNeighborsForCell.length) {
-            return 'killed';
-          } else {
-            return 'shot';
-          }
+          return shotCells.length ? 'killed' : 'shot';
         } else {
           return 'shot';
         }
@@ -112,30 +78,31 @@ export const checkNeighboringCells = (
   }
 };
 
-function getNeighboringCells(
+function selectAdjacentCells(
   field: GameField,
-  { x, y }: CellCoords
-): NeighborsCells[] {
+  { x, y }: CellCoords,
+  condition: string
+): AdjacentCells[] {
   const numRows = field.length;
   const numCols = field[0].length;
 
-  const neighbors = [];
+  const neighbors: AdjacentCells[] = [];
 
   if (x > 0) {
-    neighbors.push({ status: field[x - 1][y], x: x - 1, y });
+    neighbors.push({ status: field[y][x - 1], x: x - 1, y });
   }
 
-  if (x < numRows - 1) {
-    neighbors.push({ status: field[x + 1][y], x: x + 1, y });
+  if (x < numCols - 1) {
+    neighbors.push({ status: field[y][x + 1], x: x + 1, y });
   }
 
   if (y > 0) {
-    neighbors.push({ status: field[x][y - 1], x, y: y - 1 });
+    neighbors.push({ status: field[y - 1][x], x, y: y - 1 });
   }
 
-  if (y < numCols - 1) {
-    neighbors.push({ status: field[x][y + 1], x, y: y + 1 });
+  if (y < numRows - 1) {
+    neighbors.push({ status: field[y + 1][x], x, y: y + 1 });
   }
 
-  return neighbors;
+  return neighbors.filter((cell) => cell.status === condition);
 }

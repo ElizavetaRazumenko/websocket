@@ -1,7 +1,7 @@
 import { CellCoords, GameCell, GameField } from '../types/game';
 import { checkNeighboringCells } from './checkNeighboringCells';
 
-export const getCellStatus = (cell: GameCell, field: GameField, coords: CellCoords): string => {
+export const getCellStatus = (cell: GameCell, field: GameField, coords: CellCoords): GameCell => {
   switch (cell) {
     case 'miss':
     case 'empty':

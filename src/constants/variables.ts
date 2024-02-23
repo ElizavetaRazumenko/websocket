@@ -1,3 +1,4 @@
 export const FIELD_SIZE = 10;
 export const LARGE_SHIP_LENGTH = 3;
-export const HUGE_SHIP_LENGTH = 4;
+export const MAX_CELLS_PER_STEP = 2;
+export const CELL_LENGTH = 1;

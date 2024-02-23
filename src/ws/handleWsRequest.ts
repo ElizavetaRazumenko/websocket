@@ -38,8 +38,6 @@ export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
         attack(JSON.parse(request.data as string) as Attack);
     }
   } catch (error) {
-    ws.send(`The following error occurred: ${error}`);
-    ws.send('Please try reloading the page');
-    ws.close();
+    console.log(`The following error occurred: ${error}`);
   }
 };
