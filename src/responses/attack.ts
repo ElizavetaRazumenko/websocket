@@ -7,5 +7,8 @@ export const attack = (attackData: Attack) => {
     currentGame.player_1.wsId === attackData.indexPlayer
       ? currentGame.player_1
       : currentGame.player_2;
+  console.log('currentGame');
+  console.log(currentGame);
+  console.log('hittingPlayer');
   console.log(hittingPlayer);
 };

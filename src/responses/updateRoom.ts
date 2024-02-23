@@ -20,7 +20,7 @@ export const updateRoom = () => {
         data = availableRooms.map((room) => {
           const roomUsers = room.playerNames.map((name) => ({
             name,
-            index: players.indexOf(findPlayerByName(name)), //  Пересмотреть, можно ли вместо индекса кидать айди
+            index: findPlayerByName(name).wsId,
           }));
           return {
             roomId: room.roomId,

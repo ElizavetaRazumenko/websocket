@@ -1,7 +1,6 @@
 import { currentGames, playerRooms, removePlayerRoom, usersConnections } from '../db/db';
 import { AddUserToRoom } from '../types/core';
 import { findPlayerByName } from '../utils/findPlayer';
-import { getNumberId } from '../utils/getNumberId';
 
 export const createGame = ({ indexRoom }: AddUserToRoom) => {
   const room = playerRooms.find((room) => room.roomId === indexRoom);
@@ -10,7 +9,7 @@ export const createGame = ({ indexRoom }: AddUserToRoom) => {
     return;
   }
 
-  const idGame = getNumberId();
+  const idGame = room.roomId;
 
   const playingWsIds = room.playerNames.map((name) => {
     const player = findPlayerByName(name);
