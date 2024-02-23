@@ -47,6 +47,13 @@ export type CellCoords = {
   y: number;
 }
 
+
+export type AdjacentCells = {
+  status: GameCell;
+  x: number;
+  y: number;
+};
+
 export type AddShips = {
   gameId: number;
   ships: [

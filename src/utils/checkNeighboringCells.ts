@@ -3,13 +3,9 @@ import {
   LARGE_SHIP_LENGTH,
   MAX_CELLS_PER_STEP,
 } from '../constants/variables';
-import { CellCoords, GameCell, GameField } from '../types/game';
+import { AdjacentCells, CellCoords, GameCell, GameField } from '../types/game';
+import { selectAdjacentCells } from './selectAdjacentCells';
 
-type AdjacentCells = {
-  status: GameCell;
-  x: number;
-  y: number;
-};
 
 export const checkNeighboringCells = (
   cell: GameCell,
@@ -77,32 +73,3 @@ export const checkNeighboringCells = (
     }
   }
 };
-
-function selectAdjacentCells(
-  field: GameField,
-  { x, y }: CellCoords,
-  condition: string
-): AdjacentCells[] {
-  const numRows = field.length;
-  const numCols = field[0].length;
-
-  const neighbors: AdjacentCells[] = [];
-
-  if (x > 0) {
-    neighbors.push({ status: field[y][x - 1], x: x - 1, y });
-  }
-
-  if (x < numCols - 1) {
-    neighbors.push({ status: field[y][x + 1], x: x + 1, y });
-  }
-
-  if (y > 0) {
-    neighbors.push({ status: field[y - 1][x], x, y: y - 1 });
-  }
-
-  if (y < numRows - 1) {
-    neighbors.push({ status: field[y + 1][x], x, y: y + 1 });
-  }
-
-  return neighbors.filter((cell) => cell.status === condition);
-}

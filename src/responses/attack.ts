@@ -3,6 +3,9 @@ import { Attack } from '../types/game';
 import { findCurrentConnection } from '../utils/findCurrentConnection';
 import { findCurrentGame } from '../utils/findCurrentGame';
 import { getCellStatus } from '../utils/getCellStatus';
+import { isGameEnd } from '../utils/isGameEnd';
+import { updateField } from '../utils/updateField';
+import { sendTurn } from './sendTurn';
 
 export const attack = (attackData: Attack) => {
   const currentGame = findCurrentGame(attackData.gameId);
@@ -28,26 +31,34 @@ export const attack = (attackData: Attack) => {
       y,
     });
 
-    console.log('cellStatus');
-    console.log(cellStatus);
+    updateField(cellStatus, getAttackPlayer.field!, { x, y });
 
     const connection1 = findCurrentConnection(sendAttackPlayer.wsId);
     const connection2 = findCurrentConnection(getAttackPlayer.wsId);
 
-    const responseData = {
-      type: 'attack',
-      data: JSON.stringify({
-        position: {
-          x,
-          y,
-        },
-        currentPlayer: sendAttackPlayer.wsId,
-        status: 5,
-      }),
-      id: 0,
-    };
+    let responseData;
+    if (isGameEnd(getAttackPlayer.field!)) {
+      console.log('Game over');
+    } else {
+      responseData = {
+        type: 'attack',
+        data: JSON.stringify({
+          position: {
+            x,
+            y,
+          },
+          currentPlayer: sendAttackPlayer.wsId,
+          status: cellStatus,
+        }),
+        id: 0,
+      };
+    }
 
     connection1.send(JSON.stringify(responseData));
     connection2.send(JSON.stringify(responseData));
+
+    cellStatus === 'killed' || cellStatus === 'shot'
+      ? sendTurn(sendAttackPlayer.wsId, connection1, connection2)
+      : sendTurn(getAttackPlayer.wsId, connection1, connection2);
   }
 };
