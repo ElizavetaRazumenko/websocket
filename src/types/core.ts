@@ -1,5 +1,5 @@
 import { WebSocket } from 'ws';
-import { AddShips, Attack, GameField, RandomAttack, Ship } from './game';
+import { AddShips, Attack, GameField, RandomAttack } from './game';
 
 export interface WebSocketWithId extends WebSocket {
   id: number;
@@ -32,7 +32,6 @@ export type UserGameInfo = {
   wsId: number;
   turn: boolean;
   field?: GameField;
-  shipsData? : Ship[];
 };
 
 export type FrontRequest = {

@@ -1,4 +1,4 @@
-import { players, playerRooms, usersConnections } from '../db/db';
+import { playerRooms, usersConnections } from '../db/db';
 import { findPlayerById, findPlayerByName } from '../utils/findPlayer';
 
 export const updateRoom = () => {
