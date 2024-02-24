@@ -44,23 +44,21 @@ export const startGame = (ws: WebSocketWithId, data: AddShips) => {
   // will go first
   if (player_1.field && player_2.field) {
     if (player_1.wsId !== ws.id) {
-      player_1.turn = true;
       const connection_1 = findCurrentConnection(player_1.wsId);
       sendStartGameRequest(connection_1, player_1, playersShipsInfo.player_1!);
 
       const connection_2 = ws;
       sendStartGameRequest(connection_2, player_2, playersShipsInfo.player_2!);
 
-      sendTurn(player_1.wsId, connection_1, connection_2);
+      sendTurn(data.gameId, player_1.wsId, connection_1, connection_2);
     } else {
       const connection_1 = ws;
       sendStartGameRequest(connection_1, player_1, playersShipsInfo.player_1!);
 
-      player_2.turn = true;
       const connection_2 = findCurrentConnection(player_2.wsId);
       sendStartGameRequest(connection_2, player_2, playersShipsInfo.player_2!);
 
-      sendTurn(player_2.wsId, connection_1, connection_2);
+      sendTurn(data.gameId, player_2.wsId, connection_1, connection_2);
     }
   }
 };

@@ -28,6 +28,11 @@ export type Game = {
   player_2: UserGameInfo;
 };
 
+export type DefinedAttackers = {
+  sendAttackPlayer: UserGameInfo;
+  getAttackPlayer: UserGameInfo;
+};
+
 export type UserGameInfo = {
   wsId: number;
   turn: boolean;

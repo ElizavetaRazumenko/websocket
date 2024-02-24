@@ -4,7 +4,7 @@ import {
   PlayerReg,
   WebSocketWithId,
 } from '../types/core';
-import { AddShips, Attack } from '../types/game';
+import { AddShips, Attack, RandomAttack } from '../types/game';
 import { startGame } from '../responses/startGame';
 import { addUserToRoom } from '../responses/addUserToRoom';
 import { createGame } from '../responses/createGame';
@@ -13,6 +13,7 @@ import { regPlayer } from '../responses/regPlayer';
 import { updateRoom } from '../responses/updateRoom';
 import { updateWinners } from '../responses/updateWinners';
 import { attack } from '../responses/attack';
+import { randomAttack } from '../responses/randomAttack';
 
 export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
   try {
@@ -34,8 +35,12 @@ export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
       case 'add_ships':
         startGame(ws, JSON.parse(request.data as string) as AddShips);
         break;
-      case 'attack': 
+      case 'attack':
         attack(JSON.parse(request.data as string) as Attack);
+        break;
+      case 'randomAttack':
+        randomAttack(JSON.parse(request.data as string) as RandomAttack);
+        break;
     }
   } catch (error) {
     console.log(`The following error occurred: ${error}`);
