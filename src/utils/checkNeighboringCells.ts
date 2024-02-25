@@ -3,7 +3,7 @@ import {
   LARGE_SHIP_LENGTH,
   MAX_CELLS_PER_STEP,
 } from '../constants/variables';
-import { AdjacentCells, CellCoords, GameCell, GameField } from '../types/game';
+import { AdjacentCell, CellCoords, GameCell, GameField } from '../types/game';
 import { selectAdjacentCells } from './selectAdjacentCells';
 
 
@@ -23,7 +23,7 @@ export const checkNeighboringCells = (
     if (selectAdjacentCells(field, { x, y }, 'large').length) {
       return 'shot';
     } else {
-      const shotCells: AdjacentCells[] = selectAdjacentCells(
+      const shotCells: AdjacentCell[] = selectAdjacentCells(
         field,
         { x, y },
         'shot'
@@ -44,7 +44,7 @@ export const checkNeighboringCells = (
     if (selectAdjacentCells(field, { x, y }, 'huge').length) {
       return 'shot';
     } else {
-      const shotCells: AdjacentCells[] = selectAdjacentCells(
+      const shotCells: AdjacentCell[] = selectAdjacentCells(
         field,
         { x, y },
         'shot'
@@ -62,10 +62,10 @@ export const checkNeighboringCells = (
         const shotCellsForCell = selectAdjacentCells(field, { x, y }, 'shot');
 
         if (shotCellsForCell.length) {
-          const { x, y } = shotCellsForCell[0];
+          const { x, y } = shotCellsForCell[0] as AdjacentCell;
           const shotCells = selectAdjacentCells(field, { x, y }, 'shot');
-
-          return shotCells.length ? 'killed' : 'shot';
+          // exclude a neighboring cell that is already known
+          return shotCells.length > 1 ? 'killed' : 'shot';
         } else {
           return 'shot';
         }

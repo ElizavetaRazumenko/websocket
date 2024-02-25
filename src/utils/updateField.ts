@@ -1,4 +1,4 @@
-import { AdjacentCells, CellCoords, GameCell, GameField } from '../types/game';
+import { AdjacentCell, CellCoords, GameCell, GameField } from '../types/game';
 import { selectAdjacentCells } from './selectAdjacentCells';
 
 export const updateField = (
@@ -13,7 +13,7 @@ export const updateField = (
       shotCells.forEach((cell) => (field[cell.y][cell.x] = 'killed'));
 
       if (field[y][x] === 'large') {
-        const shotAdjacentCellsToCells: AdjacentCells[] = [];
+        const shotAdjacentCellsToCells: AdjacentCell[] = [];
 
         shotCells.forEach((cell) => {
           const neighbors = selectAdjacentCells(

@@ -18,6 +18,7 @@ export type PlayerRooms = {
 };
 
 export type Winner = {
+  wsId: number;
   name: string;
   wins: number;
 };

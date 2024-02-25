@@ -1,10 +1,14 @@
+import { winners } from '../db/db';
 import { sendTurn } from '../responses/sendTurn';
 import { DefinedAttackers } from '../types/core';
-import { CellCoords } from '../types/game';
+import { CellCoords, ShipType } from '../types/game';
 import { findCurrentConnection } from '../utils/findCurrentConnection';
+import { findPlayerById } from '../utils/findPlayer';
 import { getCellStatus } from '../utils/getCellStatus';
-import { isGameEnd } from '../utils/isGameEnd';
+import { checkIsGameEnd } from '../utils/checkIsGameEnd';
 import { updateField } from '../utils/updateField';
+import { updateWinners } from '../responses/updateWinners';
+import { sendKillShipCellData } from './sendKillShipCellsData';
 
 type Params = {
   gameId: number;
@@ -25,40 +29,62 @@ export const attackHandler = ({ gameId, coords, players }: Params) => {
 
   updateField(cellStatus, getAttackPlayer.field!, { x, y });
 
-  const connection1 = findCurrentConnection(sendAttackPlayer.wsId);
-  const connection2 = findCurrentConnection(getAttackPlayer.wsId);
+  const isGameEnd = checkIsGameEnd(getAttackPlayer.field!);
 
-  let responseData;
-  if (isGameEnd(getAttackPlayer.field!)) {
-    console.log('Game over');
-
-    responseData = {
-      type: 'finish',
-      data: JSON.stringify({
-        winPlayer: sendAttackPlayer.wsId, // CHANGE LATER!!!!!!!!!!
-      }),
-      id: 0,
-    };
-  } else {
-    responseData = {
-      type: 'attack',
-      data: JSON.stringify({
+  const type = isGameEnd ? 'finish' : 'attack';
+  const data = isGameEnd
+    ? {
+        winPlayer: sendAttackPlayer.wsId,
+      }
+    : {
         position: {
           x,
           y,
         },
         currentPlayer: sendAttackPlayer.wsId,
         status: cellStatus,
-      }),
-      id: 0,
-    };
-  }
+      };
+
+  const responseData = {
+    type,
+    data: JSON.stringify(data),
+    id: 0,
+  };
+
+  const connection1 = findCurrentConnection(sendAttackPlayer.wsId);
+  const connection2 = findCurrentConnection(getAttackPlayer.wsId);
 
   connection1.send(JSON.stringify(responseData));
   connection2.send(JSON.stringify(responseData));
 
-  // REMOVE FROM FINISH
-  cellStatus === 'killed' || cellStatus === 'shot'
-    ? sendTurn(gameId, sendAttackPlayer.wsId, connection1, connection2)
-    : sendTurn(gameId, getAttackPlayer.wsId, connection1, connection2);
+  if (cellStatus === 'killed') {
+    sendKillShipCellData(
+      getAttackPlayer.field!,
+      { x, y },
+      shottingCell as ShipType,
+      sendAttackPlayer.wsId,
+      connection1,
+      connection2
+    );
+  }
+
+  if (isGameEnd) {
+    const winner = winners.find(
+      (winner) => winner.wsId === sendAttackPlayer.wsId
+    );
+    if (winner) {
+      winner.wins += 1;
+    } else {
+      const winner = findPlayerById(sendAttackPlayer.wsId);
+      winner.wins += 1;
+
+      winners.push({ wsId: winner.wsId, name: winner.name, wins: winner.wins });
+    }
+
+    updateWinners();
+  } else {
+    cellStatus === 'killed' || cellStatus === 'shot'
+      ? sendTurn(gameId, sendAttackPlayer.wsId, connection1, connection2)
+      : sendTurn(gameId, getAttackPlayer.wsId, connection1, connection2);
+  }
 };

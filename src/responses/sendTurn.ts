@@ -8,15 +8,13 @@ export const sendTurn = (
 ) => {
   const currentGame = findCurrentGame(gameId);
 
-  currentGame.player_1.wsId === walkingPlayerId
-    ? (function () {
-        currentGame.player_1.turn = true;
-        currentGame.player_2.turn = false;
-      })()
-    : (function () {
-        currentGame.player_1.turn = false;
-        currentGame.player_2.turn = true;
-      })();
+  if (currentGame.player_1.wsId === walkingPlayerId) {
+    currentGame.player_1.turn = true;
+    currentGame.player_2.turn = false;
+  } else {
+    currentGame.player_1.turn = false;
+    currentGame.player_2.turn = true;
+  }
 
   const responseData = {
     type: 'turn',

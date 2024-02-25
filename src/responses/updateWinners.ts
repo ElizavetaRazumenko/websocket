@@ -1,9 +1,11 @@
 import { winners, usersConnections } from '../db/db';
 
 export const updateWinners = () => {
+  const winnersData = winners.map((winner) => ({ name: winner.name, wins: winner.wins}));
+
   const responseData = {
     type: 'update_winners',
-    data: JSON.stringify(winners),
+    data: JSON.stringify(winnersData),
     id: 0,
   };
 

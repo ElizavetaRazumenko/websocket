@@ -48,7 +48,7 @@ export type CellCoords = {
 }
 
 
-export type AdjacentCells = {
+export type AdjacentCell = {
   status: GameCell;
   x: number;
   y: number;
