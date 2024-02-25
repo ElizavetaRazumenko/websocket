@@ -1,8 +1,10 @@
+import { FIELD_SIZE } from '../constants/variables';
 import { AdjacentCell, CellCoords, GameField } from '../types/game';
 
 export const getSurroundingPoints = (
   cells: CellCoords[],
-  field: GameField
+  field: GameField,
+  currentCell: CellCoords
 ): AdjacentCell[] => {
   const surroundingPoints: AdjacentCell[] = [];
 
@@ -12,8 +14,12 @@ export const getSurroundingPoints = (
         const newX = x + dx;
         const newY = y + dy;
 
-        if (newX >= 0 && newX < 10 && newY >= 0 && newY < 10) {
-          surroundingPoints.push({ status: field[y][x], x: newX, y: newY });
+        if (newX >= 0 && newX < FIELD_SIZE && newY >= 0 && newY < FIELD_SIZE) {
+          surroundingPoints.push({
+            status: field[newY][newX],
+            x: newX,
+            y: newY,
+          });
         }
       }
     }
@@ -24,9 +30,11 @@ export const getSurroundingPoints = (
       index === self.findIndex((p) => p.x === point.x && p.y === point.y)
   );
 
-  const pointsWithoutSheepCoords = uniquePoints.filter(
-    (point) => !cells.find((cell) => cell.x === point.x && cell.y === point.y)
+  const indexOfCurrentCell = uniquePoints.findIndex(
+    (cell) => cell.x === currentCell.x && cell.y === currentCell.y
   );
 
-  return pointsWithoutSheepCoords;
+  uniquePoints.splice(indexOfCurrentCell, 1);
+
+  return uniquePoints;
 };

@@ -15,7 +15,7 @@ export const sendKillShipCellData = (
   const adjacentCells = selectAdjacentCells(field, cellCoords, '', true);
 
   if (shipType === 'small') {
-    neighbors.push(...adjacentCells);
+    neighbors.push(...getSurroundingPoints([cellCoords], field, cellCoords));
   } else {
     const { x, y } = cellCoords;
     const killedCells: AdjacentCell[] = [{ status: field[y][x], x, y }];
@@ -28,46 +28,57 @@ export const sendKillShipCellData = (
     if (shipType === 'large' || shipType === 'huge') {
       if (adjacentKilledCells.length < MAX_CELLS_PER_STEP) {
         const adjacentKilledCell = adjacentKilledCells[0];
-
         const { x, y } = adjacentKilledCell;
-        const adjacentKilledCellForCell = selectAdjacentCells(
+
+        const adjacentKilledCellsForCell = selectAdjacentCells(
           field,
           { x, y },
           'killed'
-        ).filter(
-          (cell) => cell.x !== cellCoords.x && cell.y !== cellCoords.y
-        )[0] as AdjacentCell;
+        );
 
-        killedCells.push(adjacentKilledCellForCell);
+        const indexOfCurrentCell = adjacentKilledCellsForCell.findIndex(
+          (cell) => cell.x === cellCoords.x && cell.y === cellCoords.y
+        );
+
+        adjacentKilledCellsForCell.splice(indexOfCurrentCell, 1);
+
+        killedCells.push(...adjacentKilledCellsForCell);
 
         if (shipType === 'huge') {
-          const { x, y } = adjacentKilledCellForCell;
+          const { x, y } = adjacentKilledCellsForCell[0];
 
-          const lastKilledCell = selectAdjacentCells(
+          const cellsWithLastKilledCell = selectAdjacentCells(
             field,
             { x, y },
             'killed'
-          ).filter(
-            (cell) =>
-              cell.x !== adjacentKilledCell.x && cell.y !== adjacentKilledCell.y
-          )[0] as AdjacentCell;
+          );
 
-          killedCells.push(lastKilledCell);
+          const indexOfCurrentCell = cellsWithLastKilledCell.findIndex(
+            (cell) =>
+              cell.x === adjacentKilledCell.x && cell.y === adjacentKilledCell.y
+          );
+
+          cellsWithLastKilledCell.splice(indexOfCurrentCell, 1);
+          killedCells.push(...cellsWithLastKilledCell);
         }
       } else {
         if (shipType === 'huge') {
-          const lastKilledCell = adjacentKilledCells.filter((cell) => selectAdjacentCells(
-            field,
-            {x: cell.x, y: cell.y },
-            'killed'
-          )).find((cell) => cell.x !== cellCoords.x && cell.y !== cellCoords.y) as AdjacentCell;
+          const cellWithLastKilledCell = adjacentKilledCells.filter((cell) =>
+            selectAdjacentCells(field, { x: cell.x, y: cell.y }, 'killed')
+          );
 
-          killedCells.push(lastKilledCell);
+          const indexOfCurrentCell = cellWithLastKilledCell.findIndex(
+            (cell) => cell.x === cellCoords.x && cell.y === cellCoords.y
+          );
+
+          cellWithLastKilledCell.splice(indexOfCurrentCell, 1);
+  
+          killedCells.push(...cellWithLastKilledCell);
         }
       }
     }
 
-    neighbors.push(...getSurroundingPoints(killedCells, field));
+    neighbors.push(...getSurroundingPoints(killedCells, field, cellCoords));
   }
 
   neighbors.forEach((cell) => {

@@ -12,7 +12,7 @@ export const updateField = (
       const shotCells = selectAdjacentCells(field, { x, y }, 'shot');
       shotCells.forEach((cell) => (field[cell.y][cell.x] = 'killed'));
 
-      if (field[y][x] === 'large') {
+      if (field[y][x] !== 'medium') {
         const shotAdjacentCellsToCells: AdjacentCell[] = [];
 
         shotCells.forEach((cell) => {
