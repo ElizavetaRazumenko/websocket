@@ -6,15 +6,34 @@ import {
   Game,
 } from '../types/core';
 
-export const usersConnections: WebSocketWithId[] = [];
+class BotWebSocket extends WebSocket {
+  id: number;
+  constructor(url: string) {
+      super(url);
+      this.id = -1;
+  }
+}
 
-export const players: Player[] = [];
+export const botWs = new BotWebSocket('ws://bot.com') as unknown as WebSocketWithId;
+
+export const usersConnections: WebSocketWithId[] = [botWs];
+
+const bot = {
+  wsId: -1,
+  name: 'Bot',
+  password: 'Bot',
+  wins: -1,
+};
+
+export const players: Player[] = [bot];
 
 export const winners: Winner[] = [];
 
 export const playerRooms: PlayerRooms[] = [];
 
 export const currentGames: Game[] = [];
+
+export const singlePlayers: Player[] = [];
 
 export const removeUserConnection = (id: number) => {
   const deletingPosition = usersConnections.findIndex(
@@ -27,3 +46,9 @@ export const removePlayerRoom = (id: number) => {
   const deletingPosition = playerRooms.findIndex((room) => room.roomId === id);
   playerRooms.splice(deletingPosition, 1);
 };
+
+export const removeSinglePlayer = (id: number) => {
+  const deletingPosition = singlePlayers.findIndex((player) => player.wsId === id);
+  singlePlayers.splice(deletingPosition, 1);
+};
+

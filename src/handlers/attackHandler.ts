@@ -1,4 +1,4 @@
-import { winners } from '../db/db';
+import { singlePlayers, winners } from '../db/db';
 import { sendTurn } from '../responses/sendTurn';
 import { DefinedAttackers } from '../types/core';
 import { CellCoords, ShipType } from '../types/game';
@@ -9,6 +9,8 @@ import { checkIsGameEnd } from '../utils/checkIsGameEnd';
 import { updateField } from '../utils/updateField';
 import { updateWinners } from '../responses/updateWinners';
 import { sendKillShipCellData } from './sendKillShipCellsData';
+import { BOT_WS_ID } from '../constants/variables';
+import { randomAttack } from '../responses/randomAttack';
 
 type Params = {
   gameId: number;
@@ -83,8 +85,22 @@ export const attackHandler = ({ gameId, coords, players }: Params) => {
 
     updateWinners();
   } else {
-    cellStatus === 'killed' || cellStatus === 'shot'
-      ? sendTurn(gameId, sendAttackPlayer.wsId, connection1, connection2)
-      : sendTurn(gameId, getAttackPlayer.wsId, connection1, connection2);
+    if (cellStatus === 'killed' || cellStatus === 'shot') {
+      sendTurn(gameId, sendAttackPlayer.wsId, connection1, connection2);
+    } else {
+      sendTurn(gameId, getAttackPlayer.wsId, connection1, connection2);
+
+      const isItSimpleGame = singlePlayers.find(
+        (player) => player.wsId === sendAttackPlayer.wsId
+      );
+      if (isItSimpleGame) {
+        const attackData = {
+          gameId,
+          indexPlayer: BOT_WS_ID,
+        };
+      
+        randomAttack(attackData);
+      }
+    }
   }
 };

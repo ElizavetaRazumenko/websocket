@@ -3,7 +3,7 @@ import { WebSocketWithId } from '../types/core';
 import { findPlayerById } from '../utils/findPlayer';
 import { getNumberId } from '../utils/getNumberId';
 
-export const createRoom = (ws: WebSocketWithId) => {
+export const createRoom = (ws: WebSocketWithId): number => {
   const roomId = getNumberId();
   const player = findPlayerById(ws.id);
 
@@ -11,4 +11,6 @@ export const createRoom = (ws: WebSocketWithId) => {
 
   console.log('Create room. All rooms:');
   console.log(playerRooms);
+
+  return roomId;
 };
