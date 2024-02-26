@@ -28,6 +28,7 @@ export const regPlayer = (
       error: true,
       errorText: 'Invalid password',
     };
+    console.log(`A user named ${data.name} entered an invalid password`);
   } else {
     data = {
       name,
@@ -35,6 +36,9 @@ export const regPlayer = (
       error: false,
       errorText: '',
     };
+
+    console.log('The following user is logged in:');
+    console.log(data.name);
   }
 
   const responseData = {
@@ -44,7 +48,4 @@ export const regPlayer = (
   };
 
   ws.send(JSON.stringify(responseData));
-
-  console.log('The following user is logged in:');
-  console.log(data);
 };

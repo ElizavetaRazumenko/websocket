@@ -1,57 +1,30 @@
 import { GameField } from '../types/game';
+import { createEmptyField } from './createGameField';
+import { Ship } from './shipsCreating/helpers';
+import { takePlaceForHugeShip } from './shipsCreating/takePlaceForHugeShip';
+import { takePlaceForLargeShips } from './shipsCreating/takePlaceForLargeShips';
+import { takePlaceForMediumShips } from './shipsCreating/takePlaceForMediumShips';
+import { takePlaceForSmallShips } from './shipsCreating/takePlaceForSmallShips';
 
 export const generateRandomField = (): GameField => {
-    const field: GameField = Array.from({ length: 10 }, () =>
-        Array.from({ length: 10 }, () => 'empty')
-    );
+  const field = createEmptyField();
+  const ships: Ship[] = [
+    { type: 'small', size: 1, placed: false },
+    { type: 'small', size: 1, placed: false },
+    { type: 'small', size: 1, placed: false },
+    { type: 'small', size: 1, placed: false },
+    { type: 'medium', size: 2, placed: false },
+    { type: 'medium', size: 2, placed: false },
+    { type: 'medium', size: 2, placed: false },
+    { type: 'large', size: 3, placed: false },
+    { type: 'large', size: 3, placed: false },
+    { type: 'huge', size: 4, placed: false },
+  ];
 
-    const ships: { size: number; count: number }[] = [
-        { size: 1, count: 4 },
-        { size: 2, count: 3 },
-        { size: 3, count: 2 },
-        { size: 4, count: 1 },
-    ];
+  takePlaceForHugeShip(field, ships);
+  takePlaceForLargeShips(field, ships);
+  takePlaceForMediumShips(field, ships);
+  takePlaceForSmallShips(field, ships);
 
-    function canPlaceShip(row: number, col: number, size: number, horizontal: boolean): boolean {
-        if (horizontal) {
-            if (col + size > 10) return false;
-            for (let i = col; i < col + size; i++) {
-                if (field[row][i] !== 'empty') return false;
-            }
-        } else {
-            if (row + size > 10) return false;
-            for (let i = row; i < row + size; i++) {
-                if (field[i][col] !== 'empty') return false;
-            }
-        }
-        return true;
-    }
-
-    function placeShip(row: number, col: number, size: number, horizontal: boolean): void {
-        if (horizontal) {
-            for (let i = col; i < col + size; i++) {
-                field[row][i] = 'small';
-            }
-        } else {
-            for (let i = row; i < row + size; i++) {
-                field[i][col] = 'small';
-            }
-        }
-    }
-
-    for (const ship of ships) {
-        for (let i = 0; i < ship.count; i++) {
-            let row: number, col: number, horizontal: boolean;
-            do {
-                row = Math.floor(Math.random() * 10);
-                col = Math.floor(Math.random() * 10);
-                horizontal = Math.random() < 0.5;
-            } while (!canPlaceShip(row, col, ship.size, horizontal));
-
-            placeShip(row, col, ship.size, horizontal);
-        }
-    }
-
-    return field;
+  return field;
 };
-

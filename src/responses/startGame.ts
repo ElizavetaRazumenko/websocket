@@ -43,6 +43,10 @@ export const startGame = (ws: WebSocketWithId, data: AddShips) => {
   // Accordingly, the player with an ID different from this connection ID
   // will go first
   if (player_1.field && player_2.field) {
+    console.log(`Player 1 field with id: ${player_1.wsId}`);
+    console.log(player_1.field);
+    console.log(`Player 2 field with id: ${player_2.wsId}`);
+    console.log(player_2.field);
     if (player_1.wsId !== ws.id) {
       const connection_1 = findCurrentConnection(player_1.wsId);
       sendStartGameRequest(connection_1, player_1, playersShipsInfo.player_1!);

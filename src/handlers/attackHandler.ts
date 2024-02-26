@@ -10,7 +10,6 @@ import { updateField } from '../utils/updateField';
 import { updateWinners } from '../responses/updateWinners';
 import { sendKillShipCellData } from './sendKillShipCellsData';
 import { BOT_WS_ID } from '../constants/variables';
-import { randomAttack } from '../responses/randomAttack';
 import { checkIsItSimpleGame } from '../utils/checkIsItSimpleGame';
 import { findCurrentGame } from '../utils/findCurrentGame';
 
@@ -100,26 +99,8 @@ export const attackHandler = ({ gameId, coords, players }: Params) => {
   } else {
     if (cellStatus === 'killed' || cellStatus === 'shot') {
       sendTurn(gameId, sendAttackPlayer.wsId, connection1, connection2);
-
-      if (sendAttackPlayer.wsId === BOT_WS_ID) {
-        const attackData = {
-          gameId,
-          indexPlayer: BOT_WS_ID,
-        };
-
-        randomAttack(attackData);
-      }
     } else {
       sendTurn(gameId, getAttackPlayer.wsId, connection1, connection2);
-
-      if (sendAttackPlayer.wsId === BOT_WS_ID) {
-        const attackData = {
-          gameId,
-          indexPlayer: BOT_WS_ID,
-        };
-
-        randomAttack(attackData);
-      }
     }
   }
 };

@@ -1,13 +1,13 @@
-import { GameField } from '../types/game';
+import { CellCoords, GameField } from '../types/game';
 
-export const generateRandomCoords = (field: GameField) => {
+export const generateRandomCoords = (field: GameField): CellCoords => {
   const markedCells = ['miss', 'killed', 'shot'];
 
-  const x = Math.floor(Math.random() * 10); 
+  const x = Math.floor(Math.random() * 10);
   const y = Math.floor(Math.random() * 10);
 
-  if (field[y]?.[x] && !markedCells.includes(field[y]?.[x])) {
+  if (!markedCells.includes(field[y]?.[x])) {
     return { x, y };
   }
-  generateRandomCoords(field);
+  return generateRandomCoords(field);
 };

@@ -30,13 +30,13 @@ export const updateRoom = () => {
       } else {
         data = {
           roomId: -1,
-          roomUser: [],
+          roomUsers: [],
         };
       }
     } else {
       data = {
         roomId: -1,
-        roomUser: [],
+        roomUsers: [],
       };
     }
     const responseData = {
@@ -47,6 +47,6 @@ export const updateRoom = () => {
     connection.send(JSON.stringify(responseData));
   });
 
-  console.log('The room has been updated');
+  console.log('The rooms has been updated');
   console.log(data);
 };
