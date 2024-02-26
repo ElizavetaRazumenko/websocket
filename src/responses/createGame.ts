@@ -1,4 +1,9 @@
-import { currentGames, playerRooms, removePlayerRoom, usersConnections } from '../db/db';
+import {
+  currentGames,
+  playerRooms,
+  removePlayerRoom,
+  usersConnections,
+} from '../db/db';
 import { AddUserToRoom } from '../types/core';
 import { findPlayerByName } from '../utils/findPlayer';
 
@@ -22,13 +27,13 @@ export const createGame = ({ indexRoom }: AddUserToRoom) => {
         idGame,
         idPlayer: connection.id,
       };
-  
+
       const responseData = {
         type: 'create_game',
         data: JSON.stringify(data),
         id: 0,
       };
-  
+
       connection.send(JSON.stringify(responseData));
     }
   });
@@ -48,6 +53,7 @@ export const createGame = ({ indexRoom }: AddUserToRoom) => {
   currentGames.push(game);
   removePlayerRoom(room.roomId);
 
-  console.log('currentGames is:');
-  console.log(currentGames[0]);
+  console.log(
+    `A game between users with id: ${playingWsIds[0]} and ${playingWsIds[1]} was created`
+  );
 };

@@ -25,5 +25,9 @@ export const randomAttack = (attackData: RandomAttack) => {
     };
 
     attackHandler(args);
+
+    console.log('This user has carried out an random attack:');
+    console.log(sendAttackPlayer);
+    console.log(`By coordinates: X - ${x}, Y - ${y}`);
   }
 };

@@ -25,5 +25,8 @@ export const attack = (attackData: Attack) => {
     };
 
     attackHandler(args);
+    console.log('This user has carried out an attack:');
+    console.log(sendAttackPlayer);
+    console.log(`By coordinates: X - ${x}, Y - ${y}`);
   }
 };

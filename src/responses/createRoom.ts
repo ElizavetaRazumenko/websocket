@@ -9,8 +9,6 @@ export const createRoom = (ws: WebSocketWithId): number => {
 
   playerRooms.push({ roomId, playerNames: [player.name] });
 
-  console.log('Create room. All rooms:');
-  console.log(playerRooms);
-
+  console.log(`A room has been created with ID: ${roomId}`);
   return roomId;
 };

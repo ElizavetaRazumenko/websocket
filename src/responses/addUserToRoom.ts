@@ -23,6 +23,6 @@ export const addUserToRoom = (
   const newPlayer = findPlayerById(ws.id);
   room.playerNames.push(newPlayer.name);
 
-  console.log('Add user to room. All rooms:');
-  console.log(playerRooms);
+  console.log(`The next user has been added to the room with ID: ${indexRoom}`);
+  console.log(newPlayer);
 };

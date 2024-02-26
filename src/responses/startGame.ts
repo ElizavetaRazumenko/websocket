@@ -50,7 +50,7 @@ export const startGame = (ws: WebSocketWithId, data: AddShips) => {
       const connection_2 = ws;
       sendStartGameRequest(connection_2, player_2, playersShipsInfo.player_2!);
 
-      sendTurn(data.gameId, player_1.wsId, connection_1, connection_2);
+      sendTurn(data.gameId, player_2.wsId, connection_1, connection_2);
     } else {
       const connection_1 = ws;
       sendStartGameRequest(connection_1, player_1, playersShipsInfo.player_1!);
@@ -58,7 +58,10 @@ export const startGame = (ws: WebSocketWithId, data: AddShips) => {
       const connection_2 = findCurrentConnection(player_2.wsId);
       sendStartGameRequest(connection_2, player_2, playersShipsInfo.player_2!);
 
-      sendTurn(data.gameId, player_2.wsId, connection_1, connection_2);
+      sendTurn(data.gameId, player_1.wsId, connection_1, connection_2);
     }
   }
+
+  console.log('The following game has been started:');
+  console.log(currentGame);
 };

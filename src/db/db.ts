@@ -6,15 +6,11 @@ import {
   Game,
 } from '../types/core';
 
-class BotWebSocket extends WebSocket {
-  id: number;
-  constructor(url: string) {
-      super(url);
-      this.id = -1;
-  }
-}
 
-export const botWs = new BotWebSocket('ws://bot.com') as unknown as WebSocketWithId;
+export const botWs = {
+  id: -1,
+  send: () => {}
+} as unknown as WebSocketWithId;
 
 export const usersConnections: WebSocketWithId[] = [botWs];
 

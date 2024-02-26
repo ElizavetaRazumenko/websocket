@@ -1,5 +1,4 @@
 import { BOT_WS_ID } from '../constants/variables';
-import { randomAttack } from '../responses/randomAttack';
 import { startGame } from '../responses/startGame';
 import { WebSocketWithId } from '../types/core';
 import { AddShips } from '../types/game';
@@ -16,11 +15,4 @@ export const startAttack = (ws: WebSocketWithId, data: AddShips) => {
 
   // register user data
   startGame(ws, data);
-
-  const attackData = {
-    gameId: data.gameId,
-    indexPlayer: BOT_WS_ID,
-  };
-
-  randomAttack(attackData);
 };

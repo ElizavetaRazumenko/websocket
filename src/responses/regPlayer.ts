@@ -45,6 +45,6 @@ export const regPlayer = (
 
   ws.send(JSON.stringify(responseData));
 
-  console.log('register player:');
-  console.log(players);
+  console.log('The following user is logged in:');
+  console.log(data);
 };

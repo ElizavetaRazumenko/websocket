@@ -46,4 +46,7 @@ export const updateRoom = () => {
     };
     connection.send(JSON.stringify(responseData));
   });
+
+  console.log('The room has been updated');
+  console.log(data);
 };

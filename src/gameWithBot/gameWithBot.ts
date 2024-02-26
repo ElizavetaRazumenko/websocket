@@ -8,6 +8,7 @@ import { startAttack } from './startAttack';
 export const gameWithBot = (ws: WebSocketWithId, request: FrontRequest) => {
   switch (request.type) {
     case 'single_play':
+      console.log('The user\'s bot game has begun');
       startSingleGame(ws);
       break;
     case 'add_ships':

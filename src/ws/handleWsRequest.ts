@@ -19,6 +19,7 @@ import { singlePlayers } from '../db/db';
 
 export const handleWsRequest = (ws: WebSocketWithId, request: FrontRequest) => {
   const isItSimpleGame = singlePlayers.find((player) => player.wsId === ws.id);
+  console.log(`Received command: ${request.type}`);
   try {
     if (isItSimpleGame) {
       gameWithBot(ws, request);

@@ -1,4 +1,4 @@
-import { singlePlayers } from '../db/db';
+import { botWs, singlePlayers } from '../db/db';
 import { WebSocketWithId } from '../types/core';
 import { findPlayerById } from '../utils/findPlayer';
 import { addUserToRoom } from '../responses/addUserToRoom';
@@ -12,11 +12,8 @@ export const startSingleGame = (ws: WebSocketWithId) => {
 
   const roomId = createRoom(ws);
   const dataForAddingUser = { indexRoom: roomId };
-  const botWS = {
-    id: -1,
-  };
-
-  addUserToRoom(botWS as WebSocketWithId, dataForAddingUser);
+ 
+  addUserToRoom(botWs, dataForAddingUser);
   updateRoom();
   createGame(dataForAddingUser);
 };
