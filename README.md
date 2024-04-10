@@ -1,1 +1,1 @@
-# nodejs_websocket_battleship
+# nodejs-websocket-battleship
